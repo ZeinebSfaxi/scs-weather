@@ -1,0 +1,52 @@
+<h1>National Weather Service Icons</h1>
+
+<table>
+    <thead>
+        <tr>
+            <td>Name</td>
+            <td>Description</td>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+<script
+        src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+        crossorigin="anonymous"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script type="text/javascript">
+
+    /**
+     * Use axios to query our API for weather icon information and then
+     * call to render them on the response.
+     */
+    function getIcons() {
+        axios.get("/api/weather/icons").then( renderIconsResponse );
+    }
+
+    /**
+     * Use jQuery to render the response into the DOM.
+     *
+     * @param axios response from our API for the icons request.
+     */
+    function renderIconsResponse( response ) {
+        // TODO: Question: How Would you view the contents of this response in the browser?
+
+        const tableBody = $( 'tbody' );
+
+        response.data.forEach( iconData => {
+            const iconRow = $( '<tr>' );
+
+            iconRow.append( $( `<td>${iconData.name}</td>` ) );
+            iconRow.append( $( `<td>${iconData.description}</td>` ) );
+
+            tableBody.append( iconRow );
+        });
+    }
+
+    $(document).ready( getIcons );
+
+
+</script>

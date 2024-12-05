@@ -29,14 +29,14 @@ public class WeatherController {
 
     // TODO: Can you describe the API endpoint that this annotated method configures?
     @RequestMapping( "/glossary" )
-    public List<Term> getGlossary( @RequestParam( required = false ) String searchTerm ) {
+    public List<Term> getGlossary( @RequestParam( required = false ) String searchTerm , @RequestParam( required = false ) String sort ) {
 
         // TODO: Would you change anything about this if block or the signatures for getGlossary or searchGlossary?
         if( searchTerm == null ) {
-            return weatherService.getGlossary();
+            return weatherService.getGlossary( sort );
         }
         else {
-            return weatherService.searchGlossary( searchTerm );
+            return weatherService.searchGlossary( searchTerm, sort );
         }
     }
 

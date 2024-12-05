@@ -5,8 +5,7 @@ import com.infor.scs.interviews.domain.Term;
 import com.infor.scs.interviews.interfaces.NationalWeatherServiceInterface;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -29,25 +28,39 @@ public class WeatherService {
         }
     }
 
-    public List<Term> getGlossary() {
+    public List<Term> getGlossary(String sort) {
+        List<Term> terms ;
 
         try {
-            return nwsInterface.getGlossary().getTerms();
+            terms = nwsInterface.getGlossary()
+                    .getTerms()
+                    .stream()
+                    .filter( (term) -> term.getTerm() != null  && term.getDefinition() != null )
+                    .collect( Collectors.toList() );
+
+                if(sort.equals("ASC")) {
+                    terms.sort(Comparator.comparing((Term term) -> term.getTerm().toLowerCase()));
+                }
+                else if (sort.equals("DESC")) {
+                    terms.sort(Comparator.comparing((Term term) -> term.getTerm().toLowerCase()).reversed());
+                }
+                return terms;
         } catch ( IOException e ) {
             return Collections.EMPTY_LIST;
         }
     }
 
-    public List<Term> searchGlossary( String searchTerm ) {
+    public List<Term> searchGlossary( String searchTerm, String sort ) {
 
 
         Predicate<Term> matchesSearchTerm = ( term ) ->
                 term.getTerm().contains( searchTerm ) || term.getDefinition().contains( searchTerm );
 
-        return getGlossary()
+        return getGlossary(sort)
                 .stream()
-                .filter( (term) -> term.getTerm() != null  && term.getDefinition() != null )
                 .filter( matchesSearchTerm )
                 .collect( Collectors.toList() );
     }
+
+
 }

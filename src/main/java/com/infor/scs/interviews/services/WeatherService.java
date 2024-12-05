@@ -40,11 +40,13 @@ public class WeatherService {
 
     public List<Term> searchGlossary( String searchTerm ) {
 
+
         Predicate<Term> matchesSearchTerm = ( term ) ->
                 term.getTerm().contains( searchTerm ) || term.getDefinition().contains( searchTerm );
 
         return getGlossary()
                 .stream()
+                .filter( (term) -> term.getTerm() != null  && term.getDefinition() != null )
                 .filter( matchesSearchTerm )
                 .collect( Collectors.toList() );
     }
